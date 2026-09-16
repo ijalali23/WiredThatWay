@@ -1,0 +1,12 @@
+node_modules/
+.venv/
+__pycache__/
+*.pyc
+projects/
+brands/*/
+!brands/_example/
+*.egg-info/
+dist/
+build/
+.env
+scripts/*.py

@@ -1,0 +1,4 @@
+{
+  "_read_me": "Source of truth for every video ever queued/posted for Wired That Way. BEFORE calling upload_video or edit_scheduled, look up the video's entry here and verify the drive_file_id's live content-length matches local_size_bytes via curl. NEVER reuse a Drive URL recalled from conversation memory without this check. AFTER a successful post, append the platform result here.",
+  "videos": []
+}
