@@ -56,7 +56,8 @@ const STEP_PREREQUISITES = {
   },
 };
 
-const PYTHON_EXE = path.join(REPO_ROOT, '.venv', 'Scripts', 'python.exe');
+const PYTHON_EXE_WINDOWS = path.join(REPO_ROOT, '.venv', 'Scripts', 'python.exe');
+const PYTHON_EXE_POSIX = path.join(REPO_ROOT, '.venv', 'bin', 'python');
 const PYTHON_FALLBACK = 'python';
 
 // ---------------------------------------------------------------------------
@@ -120,7 +121,9 @@ function run(command, options = {}) {
 }
 
 function getPython() {
-  return fs.existsSync(PYTHON_EXE) ? `"${PYTHON_EXE}"` : PYTHON_FALLBACK;
+  if (fs.existsSync(PYTHON_EXE_WINDOWS)) return `"${PYTHON_EXE_WINDOWS}"`;
+  if (fs.existsSync(PYTHON_EXE_POSIX)) return `"${PYTHON_EXE_POSIX}"`;
+  return PYTHON_FALLBACK;
 }
 
 // ---------------------------------------------------------------------------

@@ -44,7 +44,7 @@ Two-tier SVG components in `components/characters/`. Character sheets (JSON) def
 
 ## Python Venv
 
-This agent uses a dedicated Python 3.12 venv at `.venv/`. Run `bootstrap.ps1` to set up the venv, install dependencies, and create symlinks.
+This agent uses a dedicated Python 3.12 venv at `.venv/`. Run `bootstrap.ps1` (Windows/PowerShell) to create the venv and install dependencies — `scripts/kokoro_tts.py`, `whisper_transcribe.py`, and `generate_subtitles.py` are committed to this repo, no symlinking needed. On Linux/macOS, create the venv and `pip install -r requirements.txt` directly; `src/pipeline/orchestrator.js` and `src/render/pipeline.js` look for `.venv/bin/python` as well as the Windows `.venv/Scripts/python.exe` layout.
 
 ```powershell
 .\bootstrap.ps1

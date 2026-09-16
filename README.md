@@ -46,8 +46,13 @@ publish, with pixel-perfect recurring SVG characters rendered via headless Chrom
 instead of a video model. It has its own Node.js/Python toolchain, its own `.claude/skills/`
 (discovered by Claude Code as directory-scoped skills, e.g. `stickman-shorts:stickman-animation`),
 and does not share `tools/`, `media/`, or `remotion/` with the three tracks above. See
-`stickman-shorts/README.md` and `stickman-shorts/CLAUDE.md` for setup (`bootstrap.ps1` needs a
-Linux/macOS equivalent — see its requirements) and usage.
+`stickman-shorts/README.md` and `stickman-shorts/CLAUDE.md` for setup and usage. `bootstrap.ps1`
+is PowerShell/Windows-only; on Linux/macOS create `stickman-shorts/.venv` and
+`pip install -r requirements.txt` + `npm install` directly. Voice (Kokoro-82M), timestamps
+(faster-whisper), and subtitle generation are implemented and verified end-to-end (including a
+full HyperFrames render) on Linux — HyperFrames itself needs `ffmpeg`/`ffprobe` on PATH and a
+Chromium/Chrome executable (`npx hyperframes browser ensure`, or point
+`PRODUCER_HEADLESS_SHELL_PATH` at one you already have).
 
 ## How a short gets made
 

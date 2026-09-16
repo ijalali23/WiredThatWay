@@ -279,6 +279,23 @@ export function speechBubbleIn(event, defaults) {
 }
 
 /**
+ * text-overlay-in — Fade a text overlay in, hold, then fade it out.
+ * `duration` is the fade time; `holdDuration` is how long it stays at full opacity.
+ */
+export function textOverlayIn(event, defaults) {
+  const idx = typeof event.overlayIndex === 'number' ? event.overlayIndex : 0;
+  const sel = `#text-overlay-${idx}`;
+  const d = dur(event, defaults.textOverlayFadeDuration || 0.4);
+  const holdDuration = event.holdDuration || 2.0;
+  const e = ease(event, defaults, 'power1.out');
+  return [
+    `// Text overlay ${idx} — fade in, hold, fade out`,
+    `tl.fromTo("${sel}", { opacity: 0 }, { opacity: 1, duration: ${d}, ease: "${e}" }, ${pos(event)});`,
+    `tl.to("${sel}", { opacity: 0, duration: ${d}, ease: "power1.in" }, ${pos(event)} + ${d + holdDuration});`
+  ].join('\n');
+}
+
+/**
  * prop-draw-in — Same mechanic as character draw-in, for props.
  */
 export function propDrawIn(event, defaults) {
@@ -418,6 +435,7 @@ const ACTION_MAP = {
   'camera-shake': cameraShake,
   'camera-reset': cameraReset,
   'speech-bubble-in': speechBubbleIn,
+  'text-overlay-in': textOverlayIn,
   'prop-draw-in': propDrawIn,
   'squash-stretch': squashStretch,
   'point-gesture': pointGesture,

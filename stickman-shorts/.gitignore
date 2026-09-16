@@ -9,4 +9,3 @@ brands/*/
 dist/
 build/
 .env
-scripts/*.py

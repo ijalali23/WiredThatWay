@@ -686,6 +686,39 @@ function assembleSpeechBubbles(bubbles, sceneDef, template) {
   return parts.join('\n');
 }
 
+/**
+ * Assemble static/animated text overlays (headings, captions, annotations).
+ * Rendered as plain SVG <text> elements, faded in/out by the timeline —
+ * unlike speech bubbles there's no draw-in shape, just the text itself.
+ */
+function assembleTextOverlays(overlays, template) {
+  if (!overlays || overlays.length === 0) return '';
+
+  const STYLE_FIELDS = {
+    heading: { sizeKey: 'headingSize', fontKey: 'headingFont', weightKey: 'headingWeight' },
+    body: { sizeKey: 'bodySize', fontKey: 'bodyFont', weightKey: 'bodyWeight' },
+    caption: { sizeKey: 'captionSize', fontKey: 'bodyFont', weightKey: 'bodyWeight' },
+  };
+
+  const parts = [];
+  for (let i = 0; i < overlays.length; i++) {
+    const overlay = overlays[i];
+    const styleFields = STYLE_FIELDS[overlay.style] || STYLE_FIELDS.body;
+    const fontSize = template.typography?.[styleFields.sizeKey] || 40;
+    const fontFamily = template.typography?.[styleFields.fontKey] || template.typography?.bodyFont || 'sans-serif';
+    const fontWeight = template.typography?.[styleFields.weightKey] || 400;
+    const ink = template.palette?.text || template.palette?.ink || template.palette?.primary || '#1A1A1A';
+    const x = overlay.position?.x ?? 0;
+    const y = overlay.position?.y ?? 0;
+    const text = escapeXml(overlay.text || '');
+
+    parts.push(
+      `<text id="text-overlay-${i}" x="${x}" y="${y}" text-anchor="middle" font-family="${fontFamily}" font-size="${fontSize}" font-weight="${fontWeight}" fill="${ink}" opacity="0">${text}</text>`
+    );
+  }
+  return parts.join('\n');
+}
+
 function escapeXml(str) {
   return str
     .replace(/&/g, '&amp;')
@@ -845,6 +878,21 @@ var tl = gsap.timeline({ paused: true });
     }
   }
 
+  // Text overlay events
+  if (sceneDef.textOverlays) {
+    for (let i = 0; i < sceneDef.textOverlays.length; i++) {
+      const overlay = sceneDef.textOverlays[i];
+      events.push({
+        time: overlay.time || 0,
+        target: `text-overlay-${i}`,
+        action: 'text-overlay-in',
+        duration: defaults.textOverlayFadeDuration || 0.4,
+        overlayIndex: i,
+        holdDuration: overlay.duration || 2.0,
+      });
+    }
+  }
+
   // Explicit timeline events from the scene definition
   if (sceneDef.timeline) {
     for (const ev of sceneDef.timeline) {
@@ -959,7 +1007,7 @@ function generateSVGDefs(template, characters) {
 /**
  * Build the complete HTML document.
  */
-function buildHTML(sceneDef, template, characterSVGs, propSVGs, speechBubbleSVG, timelineScript, orientation) {
+function buildHTML(sceneDef, template, characterSVGs, propSVGs, speechBubbleSVG, textOverlaySVG, timelineScript, orientation) {
   const layout = orientation === 'vertical'
     ? (template.layout?.vertical || { width: 1080, height: 1920 })
     : (template.layout?.landscape || { width: 1920, height: 1080 });
@@ -1026,6 +1074,9 @@ ${template.palette?.characterStroke ? `    g[id^="char-"] path, g[id^="char-"] l
 
       <!-- Speech bubbles -->
       ${speechBubbleSVG}
+
+      <!-- Text overlays -->
+      ${textOverlaySVG}
 
     </g>
   </svg>
@@ -1133,6 +1184,14 @@ function computeSceneDuration(sceneDef, template) {
     }
   }
 
+  // Check text overlays
+  if (sceneDef.textOverlays) {
+    for (const t of sceneDef.textOverlays) {
+      const end = (t.time || 0) + (t.duration || 2.0) + 0.5; // +0.5 for fade-out
+      if (end > maxEnd) maxEnd = end;
+    }
+  }
+
   // Check prop entrances
   if (sceneDef.props) {
     for (const p of sceneDef.props) {
@@ -1229,6 +1288,9 @@ export async function composeScene(sceneDefPath, options = {}) {
   // ---- Assemble speech bubbles ----
   const speechBubbleSVG = assembleSpeechBubbles(sceneDef.speechBubbles, sceneDef, template);
 
+  // ---- Assemble text overlays ----
+  const textOverlaySVG = assembleTextOverlays(sceneDef.textOverlays, template);
+
   // ---- Generate GSAP timeline ----
   console.log(`[compositor] Generating GSAP timeline...`);
   const timelineScript = generateTimeline(sceneDef, template);
@@ -1238,6 +1300,7 @@ export async function composeScene(sceneDefPath, options = {}) {
   if (sceneDef.characters) eventCount += sceneDef.characters.filter(c => c.enter).length;
   if (sceneDef.props) eventCount += sceneDef.props.filter(p => p.enter).length;
   if (sceneDef.speechBubbles) eventCount += sceneDef.speechBubbles.length;
+  if (sceneDef.textOverlays) eventCount += sceneDef.textOverlays.length;
   if (sceneDef.camera?.moves) eventCount += sceneDef.camera.moves.length;
 
   // ---- Build HTML ----
@@ -1248,6 +1311,7 @@ export async function composeScene(sceneDefPath, options = {}) {
     characterSVGs.join('\n      '),
     propSVGs.join('\n      '),
     speechBubbleSVG,
+    textOverlaySVG,
     timelineScript,
     orientation,
   );
