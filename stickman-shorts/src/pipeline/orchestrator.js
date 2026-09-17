@@ -56,6 +56,16 @@ const STEP_PREREQUISITES = {
   },
 };
 
+// config.voice in video-project.json -> the TTS wrapper script that handles it.
+// kokoro is the default: fast, free, fully local, but limited expressive
+// range (only a speed control, no emotion/pitch). xtts (Coqui XTTS v2) is
+// slower and needs its non-commercial CPML license accepted, but has
+// measurably wider pitch/energy range for scenes that need real delivery.
+const VOICE_ENGINE_SCRIPTS = {
+  kokoro: 'kokoro_tts.py',
+  xtts: 'xtts_tts.py',
+};
+
 const PYTHON_EXE_WINDOWS = path.join(REPO_ROOT, '.venv', 'Scripts', 'python.exe');
 const PYTHON_EXE_POSIX = path.join(REPO_ROOT, '.venv', 'bin', 'python');
 const PYTHON_FALLBACK = 'python';
@@ -216,7 +226,14 @@ export function runVoice(projectDir) {
     ensureDir(audioDir);
 
     const python = getPython();
-    const ttsScript = path.join(REPO_ROOT, 'scripts', 'kokoro_tts.py');
+    const projectJsonPath = path.join(projectDir, 'video-project.json');
+    const project = fs.existsSync(projectJsonPath) ? readJSON(projectJsonPath) : {};
+    const engine = project.config?.voice || 'kokoro';
+    const ttsScriptName = VOICE_ENGINE_SCRIPTS[engine];
+    if (!ttsScriptName) {
+      throw new Error(`Unknown voice engine "${engine}" — expected one of: ${Object.keys(VOICE_ENGINE_SCRIPTS).join(', ')}`);
+    }
+    const ttsScript = path.join(REPO_ROOT, 'scripts', ttsScriptName);
 
     if (!fs.existsSync(ttsScript)) {
       throw new Error(`TTS script not found: ${ttsScript}`);

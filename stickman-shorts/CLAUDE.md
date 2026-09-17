@@ -60,12 +60,24 @@ Invoke Python scripts via:
 | Tool | Install | Purpose |
 |---|---|---|
 | HyperFrames | `npm i hyperframes` | Composition + render |
-| Kokoro-82M | pip (in .venv) | Default TTS (free, local) |
+| Kokoro-82M | pip (in .venv) | Default TTS (free, local, `config.voice: "kokoro"`) |
+| XTTS v2 | `pip -r requirements-xtts.txt` | Optional TTS (`config.voice: "xtts"`) — wider pitch/energy range, slower, non-commercial CPML license unless you hold a Coqui commercial license |
 | faster-whisper | pip (in .venv) | Word-level timestamps |
 | GSAP | CDN in HTML compositions | Animation |
 | Node.js >=22 | Already installed | HyperFrames runtime |
 | FFmpeg | Already installed | Audio/video assembly |
 | Chrome | Already installed | Headless render |
+
+## Voice Engines
+
+`config.voice` in `video-project.json` selects which script `src/pipeline/orchestrator.js`'s `voice` step runs (`VOICE_ENGINE_SCRIPTS` in orchestrator.js):
+
+| `config.voice` | Script | `config.voiceId` | Notes |
+|---|---|---|---|
+| `"kokoro"` (default) | `scripts/kokoro_tts.py` | a Kokoro voice, e.g. `af_heart`, `am_puck` | Fast, free, fully local. Only exposes a `speed` control — no emotion/pitch parameter, each voice's style is fixed. |
+| `"xtts"` | `scripts/xtts_tts.py` | an XTTS speaker name, e.g. `Andrew Chipper` (58 built in) | Measurably wider pitch/energy range (checked directly: ~138Hz pitch range vs Kokoro's ~95Hz on the same line). ~2x realtime on CPU. Needs `requirements-xtts.txt` and CPML license acceptance. |
+
+Both wrappers split narration into clauses themselves and stitch them with explicit, punctuation-tuned silence (`scripts/_tts_pacing.py`) — neither engine's own sentence splitter produces comedically-timed pauses on its own.
 
 ## Project Output
 

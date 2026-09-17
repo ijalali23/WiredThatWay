@@ -22,6 +22,11 @@ $pip = Join-Path $venvPath "Scripts\pip.exe"
 Write-Host "Installing Python dependencies..." -ForegroundColor Yellow
 & $pip install -r (Join-Path $ProjectRoot "requirements.txt")
 
+# 2b. Optional: XTTS v2 voice engine (config.voice = "xtts"), wider pitch/energy
+# range than Kokoro but slower and non-commercially licensed unless you hold a
+# Coqui commercial license — see requirements-xtts.txt.
+# & $pip install -r (Join-Path $ProjectRoot "requirements-xtts.txt")
+
 # 3. Install npm dependencies
 Write-Host "Installing npm dependencies..." -ForegroundColor Yellow
 Set-Location $ProjectRoot

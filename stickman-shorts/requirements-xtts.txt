@@ -1,0 +1,16 @@
+# Optional extra dependencies for the XTTS v2 voice engine (config.voice = "xtts"
+# in video-project.json). Not needed for the default Kokoro engine — install
+# only if a project opts into XTTS for its wider pitch/energy range.
+#
+#   pip install -r requirements.txt -r requirements-xtts.txt
+#
+# XTTS v2 (via coqui-tts) requires transformers<5 — the 5.x line removed an
+# API coqui-tts's tortoise/XTTS layer still imports. This does not affect
+# the default Kokoro engine, which works fine on either transformers line.
+#
+# Downloading the XTTS v2 model (~1.9GB, first run only) requires accepting
+# Coqui's non-commercial CPML license, or holding a commercial license from
+# Coqui (licensing@coqui.ai) — see scripts/xtts_tts.py.
+coqui-tts
+torchaudio
+transformers<5
