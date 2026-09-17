@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-70 -70 140 140">
+  <!-- Component: cartoon Earth globe (wobbly outline, doodled continents, orbit dashes) | Tier: prop | Origin: globe center at (0,0) -->
+  <g data-component="prop-earth" data-tier="prop" data-attach-center="0,0" data-attach-surface="0,-62">
+    <!-- Globe outline — slightly wobbly circle -->
+    <path d="M0,-62 C34,-62 60,-34 60,0 C60,34 34,62 0,62 C-34,62 -60,34 -60,0 C-60,-34 -34,-62 0,-62"
+      stroke="#1A1A1A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <!-- Latitude curve -->
+    <path d="M-58,-14 C-20,-4 20,-4 58,-14" stroke="#1A1A1A" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.35"/>
+    <path d="M-58,18 C-20,26 20,26 58,18" stroke="#1A1A1A" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.35"/>
+    <!-- Continent doodle 1 -->
+    <path d="M-38,-30 C-26,-36 -14,-32 -10,-22 C-6,-14 -14,-8 -24,-10 C-36,-12 -44,-22 -38,-30 Z"
+      stroke="#1A1A1A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Continent doodle 2 -->
+    <path d="M10,-6 C22,-10 34,-4 36,8 C38,20 28,32 16,30 C8,28 4,16 6,6 C7,0 8,-4 10,-6 Z"
+      stroke="#1A1A1A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Continent doodle 3 (small island) -->
+    <path d="M-30,24 C-24,20 -16,22 -15,28 C-14,34 -22,38 -28,34 C-31,32 -32,27 -30,24 Z"
+      stroke="#1A1A1A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Orbit ring (dashed, for escape-trajectory diagrams) -->
+    <path data-part="orbit" d="M0,-78 C46,-78 78,-42 78,0 C78,42 46,78 0,78 C-46,78 -78,42 -78,0 C-78,-42 -46,-78 0,-78"
+      stroke="#4A4A4A" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-dasharray="4 6" opacity="0.5"/>
+  </g>
+</svg>

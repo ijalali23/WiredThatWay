@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-30 -70 60 140">
+  <!-- Component: cartoon rocket (nose cone, body, fins, window, flame) | Tier: prop | Origin: body center at (0,0) -->
+  <g data-component="prop-rocket" data-tier="prop" data-attach-top="0,-70" data-attach-center="0,0" data-attach-base="0,45">
+    <!-- Nose cone -->
+    <path d="M0,-68 C10,-50 15,-35 15,-20 L-15,-20 C-15,-35 -10,-50 0,-68 Z"
+      stroke="#1A1A1A" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Body -->
+    <path d="M-15,-20 C-16,5 -16,25 -14,42 L14,42 C16,25 16,5 15,-20 Z"
+      stroke="#1A1A1A" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Window -->
+    <circle cx="0" cy="-6" r="8" stroke="#1A1A1A" stroke-width="2.5" fill="none"/>
+    <circle cx="0" cy="-6" r="3" stroke="#1A1A1A" stroke-width="1.2" fill="none" opacity="0.5"/>
+    <!-- Body seam lines -->
+    <path d="M-14,20 L14,20" stroke="#1A1A1A" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.4"/>
+    <!-- Left fin -->
+    <path d="M-14,18 C-26,26 -30,38 -28,46 C-20,42 -15,36 -13,28 Z"
+      stroke="#1A1A1A" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Right fin -->
+    <path d="M14,18 C26,26 30,38 28,46 C20,42 15,36 13,28 Z"
+      stroke="#1A1A1A" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Base ring -->
+    <path d="M-14,42 C-6,46 6,46 14,42" stroke="#1A1A1A" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <!-- Flame (toggle visibility with data-part="flame" for launch/idle states) -->
+    <g data-part="flame">
+      <path d="M-9,45 C-11,54 -7,62 0,70 C7,62 11,54 9,45 C5,50 -5,50 -9,45 Z"
+        stroke="#C0392B" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M-4,46 C-5,52 -2,58 0,63 C2,58 5,52 4,46"
+        stroke="#C0392B" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.6"/>
+    </g>
+  </g>
+</svg>
